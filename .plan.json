@@ -1,0 +1,374 @@
+{
+  "version": 1,
+  "language": "de",
+  "understanding": {
+    "summary": "Die Anwendung verbindet jede KI-Nutzung mit der tatsächlichen Arbeit. Im Mittelpunkt steht das Vorhaben mit Problem, Zielbild und Verantwortlichen. Dazu kommen die genutzten Informationen und Annahmen, die KI-Interaktionen mit menschlicher Bewertung, Entscheidungen und Freigaben, Ergebnisse mit nachweisbarem Nutzen und geprüfte Erkenntnisse für künftige Aufgaben. So bleibt nachvollziehbar, wer was verantwortet hat, und Erfahrung wird erst nach Prüfung wiederverwendet.",
+    "roles": [
+      "Verantwortliche für Vorhaben",
+      "Prüfer und Prüferinnen",
+      "Entscheidungsträger und Freigebende",
+      "Geschäftsleitung / Controlling"
+    ],
+    "main_tasks": [
+      "Vorhaben mit Problem, Ziel und Erfolgskriterien anlegen",
+      "Informationen und Annahmen erfassen und prüfen",
+      "KI-Interaktionen dokumentieren und menschlich bewerten",
+      "Entscheidungen und Freigaben festhalten",
+      "Ergebnisse und Nutzen mit Fehlern, Nacharbeit und Zeit nachweisen",
+      "Erkenntnisse prüfen, freigeben und auf Gültigkeit achten"
+    ],
+    "platform_roles": [
+      {
+        "persona": "Verantwortliche für Vorhaben",
+        "role": "datenverarbeitung",
+        "apps": [
+          "vorhaben",
+          "informationen_und_annahmen",
+          "ki_interaktionen",
+          "entscheidungen_und_freigaben",
+          "ergebnisse_und_nutzen",
+          "erkenntnisse"
+        ]
+      },
+      {
+        "persona": "Prüfer und Prüferinnen",
+        "role": "datenverarbeitung",
+        "apps": [
+          "informationen_und_annahmen",
+          "ki_interaktionen",
+          "erkenntnisse",
+          "vorhaben"
+        ]
+      },
+      {
+        "persona": "Entscheidungsträger und Freigebende",
+        "role": "standard",
+        "apps": [
+          "entscheidungen_und_freigaben",
+          "vorhaben",
+          "ergebnisse_und_nutzen",
+          "ki_interaktionen",
+          "informationen_und_annahmen"
+        ]
+      },
+      {
+        "persona": "Geschäftsleitung / Controlling",
+        "role": "minimal",
+        "apps": [
+          "vorhaben",
+          "ergebnisse_und_nutzen",
+          "erkenntnisse",
+          "entscheidungen_und_freigaben",
+          "ki_interaktionen",
+          "informationen_und_annahmen"
+        ]
+      }
+    ]
+  },
+  "flows": [
+    {
+      "slug": "vorhaben-anlegen",
+      "label": {
+        "de": "Vorhaben anlegen",
+        "en": "Create project"
+      },
+      "description": "Ein neues Vorhaben mit Problem, Zielbild, Erfolgskriterien und verantwortlicher Person als zentralen Arbeitskontext anlegen.",
+      "priority": "must",
+      "writes": [
+        {
+          "entity": "vorhaben",
+          "op": "create",
+          "when": "always",
+          "fields": {
+            "titel": "user",
+            "problem": "user",
+            "zielbild": "user",
+            "erfolgskriterien": "user",
+            "verantwortlich_vorname": "user",
+            "verantwortlich_nachname": "user",
+            "bereich": "user",
+            "startdatum": "user",
+            "zieldatum": "user",
+            "status": "fixed:geplant"
+          },
+          "needs": {}
+        }
+      ],
+      "required": [],
+      "brief": "# Flow `vorhaben-anlegen` — Vorhaben anlegen\nEin neues Vorhaben mit Problem, Zielbild, Erfolgskriterien und verantwortlicher Person als zentralen Arbeitskontext anlegen.\n\n## Your hook — import it, never rebuild what it owns\n`import { useVorhabenAnlegenFlow } from '@/lib/journey/flows/VorhabenAnlegen';` — generated from the Schreibliste below. It OWNS the form(s), one record search per picked field (columns and filter from the plan) and the submit plan with every fixed and derived value. You compose: `flow.forms.<entity>` for <Bound>/<Field>, `{...flow.picks.<field>.select} {...flow.pick('<field>')}` (or `flow.pickMany` for a multi pick) for <EntitySelectStep>, `flow.validateStep(n)` in StepNav.onNext, `flow.submit` + `flow.formList` for SummaryStep/SuccessStep, `flow.reset()`; what the hook does not own reads through its door `flow.port` — availability `useOccupancy(flow.port, '<entity>', { resource })`, a count `useRecordCount(flow.port, …)` — never import servicePort next to the hook. Options: `steps` (field → step), `items` (how a hit reads, per pick), `initial`, `messages`. The hook's docblock in .lane-context.md shows the exact call. Never import servicePort, useStepForm, useJourneySubmit, useRecordSearch or useDashboardData in this page — check-intents refuses a page that uses the hook and any of them.\n\n## Steps (in this order)\n1. Titel und Problembeschreibung erfassen\n2. Zielbild und Erfolgskriterien festlegen\n3. Verantwortliche Person und Zeitraum angeben\n\n## Schreibliste — the ONLY writes this flow makes (the gate compares your plan steps with this list)\n- creates `vorhaben`:\n    - `titel`: the user enters it (bind it through the layer: form.field/…)\n    - `problem`: the user enters it (bind it through the layer: form.field/…)\n    - `zielbild`: the user enters it (bind it through the layer: form.field/…)\n    - `erfolgskriterien`: the user enters it (bind it through the layer: form.field/…)\n    - `verantwortlich_vorname`: the user enters it (bind it through the layer: form.field/…)\n    - `verantwortlich_nachname`: the user enters it (bind it through the layer: form.field/…)\n    - `bereich`: the user enters it (bind it through the layer: form.field/…)\n    - `startdatum`: the user enters it (bind it through the layer: form.field/…)\n    - `zieldatum`: the user enters it (bind it through the layer: form.field/…)\n    - `status`: fixed value `geplant` — set it in the plan step's values, never ask\n\n## Success page\n- shows: `vorhaben.titel`, `vorhaben.status`\n- next flows to offer: `information-erfassen`, `ki-interaktion-dokumentieren`\n\n## Never write these — another flow or a tool owns them\n- `informationen_und_annahmen.vorhaben` (owner: intent `information-erfassen`)\n- `informationen_und_annahmen.bezeichnung` (owner: intent `information-erfassen`)\n- `informationen_und_annahmen.art` (owner: intent `information-erfassen`)\n- `informationen_und_annahmen.inhalt` (owner: intent `information-erfassen`)\n- `informationen_und_annahmen.quelle` (owner: intent `information-erfassen`)\n- `informationen_und_annahmen.zustaendig_vorname` (owner: intent `information-erfassen`)\n- `informationen_und_annahmen.zustaendig_nachname` (owner: intent `information-erfassen`)\n- `informationen_und_annahmen.gueltig_bis` (owner: intent `information-erfassen`)\n- `informationen_und_annahmen.vertrauensgrad` (owner: intent `information-erfassen`)\n- `informationen_und_annahmen.pruefstatus` (owner: intent `information-erfassen`)\n- `informationen_und_annahmen.pruefhinweis` (owner: intent `information-pruefen`)\n- `ki_interaktionen.vorhaben` (owner: intent `ki-interaktion-dokumentieren`)\n- `ki_interaktionen.zeitpunkt` (owner: intent `ki-interaktion-dokumentieren`)\n- `ki_interaktionen.werkzeug` (owner: intent `ki-interaktion-dokumentieren`)\n- `ki_interaktionen.zweck` (owner: intent `ki-interaktion-dokumentieren`)\n- `ki_interaktionen.eingabe` (owner: intent `ki-interaktion-dokumentieren`)\n- `ki_interaktionen.informationen` (owner: intent `ki-interaktion-dokumentieren`)\n- `ki_interaktionen.ki_ergebnis` (owner: intent `ki-interaktion-dokumentieren`)\n- `ki_interaktionen.bewertung` (owner: intent `ki-interaktion-dokumentieren`)\n- `ki_interaktionen.korrekturen` (owner: intent `ki-interaktion-dokumentieren`)\n- `ki_interaktionen.pruefer_vorname` (owner: intent `ki-interaktion-dokumentieren`)\n- `ki_interaktionen.pruefer_nachname` (owner: intent `ki-interaktion-dokumentieren`)\n- `entscheidungen_und_freigaben.vorhaben` (owner: intent `entscheidung-festhalten`)\n- `entscheidungen_und_freigaben.ki_interaktion` (owner: intent `entscheidung-festhalten`)\n- `entscheidungen_und_freigaben.entscheidung` (owner: intent `entscheidung-festhalten`)\n- `entscheidungen_und_freigaben.entscheidungsart` (owner: intent `entscheidung-festhalten`)\n- `entscheidungen_und_freigaben.begruendung` (owner: intent `entscheidung-festhalten`)\n- `entscheidungen_und_freigaben.alternativen` (owner: intent `entscheidung-festhalten`)\n- `entscheidungen_und_freigaben.verantwortlich_vorname` (owner: intent `entscheidung-festhalten`)\n- `entscheidungen_und_freigaben.verantwortlich_nachname` (owner: intent `entscheidung-festhalten`)\n- `entscheidungen_und_freigaben.datum` (owner: intent `entscheidung-festhalten`)\n- `entscheidungen_und_freigaben.freigabestatus` (owner: intent `entscheidung-festhalten`)\n- `ergebnisse_und_nutzen.vorhaben` (owner: intent `ergebnis-nachweisen`)\n- `ergebnisse_und_nutzen.entscheidung` (owner: intent `ergebnis-nachweisen`)\n- `ergebnisse_und_nutzen.ergebnisbeschreibung` (owner: intent `ergebnis-nachweisen`)\n- `ergebnisse_und_nutzen.datum` (owner: intent `ergebnis-nachweisen`)\n- `ergebnisse_und_nutzen.qualitaet` (owner: intent `ergebnis-nachweisen`)\n- `ergebnisse_und_nutzen.anzahl_fehler` (owner: intent `ergebnis-nachweisen`)\n- `ergebnisse_und_nutzen.nacharbeit_stunden` (owner: intent `ergebnis-nachweisen`)\n- `ergebnisse_und_nutzen.bearbeitungszeit_stunden` (owner: intent `ergebnis-nachweisen`)\n- `ergebnisse_und_nutzen.nutzen` (owner: intent `ergebnis-nachweisen`)\n- `ergebnisse_und_nutzen.nachweis` (owner: intent `ergebnis-nachweisen`)\n- `erkenntnisse.qualitaetsstatus` (owner: tool `erkenntnis-zurueckziehen`)\n- `erkenntnisse.pruefdatum` (owner: tool `pruefdatum-setzen`)\n"
+    },
+    {
+      "slug": "information-erfassen",
+      "label": {
+        "de": "Information oder Annahme erfassen",
+        "en": "Record information or assumption"
+      },
+      "description": "Eine Information oder Annahme zu einem Vorhaben festhalten, zunächst als ungeprüft.",
+      "priority": "must",
+      "writes": [
+        {
+          "entity": "informationen_und_annahmen",
+          "op": "create",
+          "when": "always",
+          "fields": {
+            "vorhaben": "picked",
+            "bezeichnung": "user",
+            "art": "user",
+            "inhalt": "user",
+            "quelle": "user",
+            "zustaendig_vorname": "user",
+            "zustaendig_nachname": "user",
+            "gueltig_bis": "user",
+            "vertrauensgrad": "user",
+            "pruefstatus": "fixed:ungeprueft"
+          },
+          "needs": {}
+        }
+      ],
+      "required": [],
+      "brief": "# Flow `information-erfassen` — Information oder Annahme erfassen\nEine Information oder Annahme zu einem Vorhaben festhalten, zunächst als ungeprüft.\n\n## Your hook — import it, never rebuild what it owns\n`import { useInformationErfassenFlow } from '@/lib/journey/flows/InformationErfassen';` — generated from the Schreibliste below. It OWNS the form(s), one record search per picked field (columns and filter from the plan) and the submit plan with every fixed and derived value. You compose: `flow.forms.<entity>` for <Bound>/<Field>, `{...flow.picks.<field>.select} {...flow.pick('<field>')}` (or `flow.pickMany` for a multi pick) for <EntitySelectStep>, `flow.validateStep(n)` in StepNav.onNext, `flow.submit` + `flow.formList` for SummaryStep/SuccessStep, `flow.reset()`; what the hook does not own reads through its door `flow.port` — availability `useOccupancy(flow.port, '<entity>', { resource })`, a count `useRecordCount(flow.port, …)` — never import servicePort next to the hook. Options: `steps` (field → step), `items` (how a hit reads, per pick: vorhaben), `initial`, `messages`. The hook's docblock in .lane-context.md shows the exact call. Never import servicePort, useStepForm, useJourneySubmit, useRecordSearch or useDashboardData in this page — check-intents refuses a page that uses the hook and any of them.\n\n## Steps (in this order)\n1. Vorhaben wählen\n2. Bezeichnung, Art und Inhalt erfassen\n3. Quelle, Zuständige und Gültigkeit angeben\n\n## Schreibliste — the ONLY writes this flow makes (the gate compares your plan steps with this list)\n- creates `informationen_und_annahmen`:\n    - `vorhaben`: from the record the user picks in this flow\n    - `bezeichnung`: the user enters it (bind it through the layer: form.field/…)\n    - `art`: the user enters it (bind it through the layer: form.field/…)\n    - `inhalt`: the user enters it (bind it through the layer: form.field/…)\n    - `quelle`: the user enters it (bind it through the layer: form.field/…)\n    - `zustaendig_vorname`: the user enters it (bind it through the layer: form.field/…)\n    - `zustaendig_nachname`: the user enters it (bind it through the layer: form.field/…)\n    - `gueltig_bis`: the user enters it (bind it through the layer: form.field/…)\n    - `vertrauensgrad`: the user enters it (bind it through the layer: form.field/…)\n    - `pruefstatus`: fixed value `ungeprueft` — set it in the plan step's values, never ask\n\n## Reads\n- `vorhaben` columns titel, status\n\n## Success page\n- shows: `informationen_und_annahmen.bezeichnung`, `informationen_und_annahmen.pruefstatus`\n- next flows to offer: `information-pruefen`\n\n## Never write these — another flow or a tool owns them\n- `vorhaben.titel` (owner: intent `vorhaben-anlegen`)\n- `vorhaben.problem` (owner: intent `vorhaben-anlegen`)\n- `vorhaben.zielbild` (owner: intent `vorhaben-anlegen`)\n- `vorhaben.erfolgskriterien` (owner: intent `vorhaben-anlegen`)\n- `vorhaben.verantwortlich_vorname` (owner: intent `vorhaben-anlegen`)\n- `vorhaben.verantwortlich_nachname` (owner: intent `vorhaben-anlegen`)\n- `vorhaben.bereich` (owner: intent `vorhaben-anlegen`)\n- `vorhaben.startdatum` (owner: intent `vorhaben-anlegen`)\n- `vorhaben.zieldatum` (owner: intent `vorhaben-anlegen`)\n- `vorhaben.status` (owner: intent `vorhaben-anlegen`)\n- `informationen_und_annahmen.pruefhinweis` (owner: intent `information-pruefen`)\n- `ki_interaktionen.vorhaben` (owner: intent `ki-interaktion-dokumentieren`)\n- `ki_interaktionen.zeitpunkt` (owner: intent `ki-interaktion-dokumentieren`)\n- `ki_interaktionen.werkzeug` (owner: intent `ki-interaktion-dokumentieren`)\n- `ki_interaktionen.zweck` (owner: intent `ki-interaktion-dokumentieren`)\n- `ki_interaktionen.eingabe` (owner: intent `ki-interaktion-dokumentieren`)\n- `ki_interaktionen.informationen` (owner: intent `ki-interaktion-dokumentieren`)\n- `ki_interaktionen.ki_ergebnis` (owner: intent `ki-interaktion-dokumentieren`)\n- `ki_interaktionen.bewertung` (owner: intent `ki-interaktion-dokumentieren`)\n- `ki_interaktionen.korrekturen` (owner: intent `ki-interaktion-dokumentieren`)\n- `ki_interaktionen.pruefer_vorname` (owner: intent `ki-interaktion-dokumentieren`)\n- `ki_interaktionen.pruefer_nachname` (owner: intent `ki-interaktion-dokumentieren`)\n- `entscheidungen_und_freigaben.vorhaben` (owner: intent `entscheidung-festhalten`)\n- `entscheidungen_und_freigaben.ki_interaktion` (owner: intent `entscheidung-festhalten`)\n- `entscheidungen_und_freigaben.entscheidung` (owner: intent `entscheidung-festhalten`)\n- `entscheidungen_und_freigaben.entscheidungsart` (owner: intent `entscheidung-festhalten`)\n- `entscheidungen_und_freigaben.begruendung` (owner: intent `entscheidung-festhalten`)\n- `entscheidungen_und_freigaben.alternativen` (owner: intent `entscheidung-festhalten`)\n- `entscheidungen_und_freigaben.verantwortlich_vorname` (owner: intent `entscheidung-festhalten`)\n- `entscheidungen_und_freigaben.verantwortlich_nachname` (owner: intent `entscheidung-festhalten`)\n- `entscheidungen_und_freigaben.datum` (owner: intent `entscheidung-festhalten`)\n- `entscheidungen_und_freigaben.freigabestatus` (owner: intent `entscheidung-festhalten`)\n- `ergebnisse_und_nutzen.vorhaben` (owner: intent `ergebnis-nachweisen`)\n- `ergebnisse_und_nutzen.entscheidung` (owner: intent `ergebnis-nachweisen`)\n- `ergebnisse_und_nutzen.ergebnisbeschreibung` (owner: intent `ergebnis-nachweisen`)\n- `ergebnisse_und_nutzen.datum` (owner: intent `ergebnis-nachweisen`)\n- `ergebnisse_und_nutzen.qualitaet` (owner: intent `ergebnis-nachweisen`)\n- `ergebnisse_und_nutzen.anzahl_fehler` (owner: intent `ergebnis-nachweisen`)\n- `ergebnisse_und_nutzen.nacharbeit_stunden` (owner: intent `ergebnis-nachweisen`)\n- `ergebnisse_und_nutzen.bearbeitungszeit_stunden` (owner: intent `ergebnis-nachweisen`)\n- `ergebnisse_und_nutzen.nutzen` (owner: intent `ergebnis-nachweisen`)\n- `ergebnisse_und_nutzen.nachweis` (owner: intent `ergebnis-nachweisen`)\n- `erkenntnisse.qualitaetsstatus` (owner: tool `erkenntnis-zurueckziehen`)\n- `erkenntnisse.pruefdatum` (owner: tool `pruefdatum-setzen`)\n"
+    },
+    {
+      "slug": "information-pruefen",
+      "label": {
+        "de": "Information prüfen",
+        "en": "Review information"
+      },
+      "description": "Ungeprüfte Informationen und Annahmen bestätigen, widerlegen oder als veraltet markieren.",
+      "priority": "must",
+      "writes": [
+        {
+          "entity": "informationen_und_annahmen",
+          "op": "update",
+          "when": "always",
+          "fields": {
+            "pruefstatus": "user",
+            "vertrauensgrad": "user",
+            "pruefhinweis": "user"
+          },
+          "needs": {}
+        }
+      ],
+      "required": [],
+      "brief": "# Flow `information-pruefen` — Information prüfen\nUngeprüfte Informationen und Annahmen bestätigen, widerlegen oder als veraltet markieren.\n\n## Your hook — import it, never rebuild what it owns\n`import { useInformationPruefenFlow } from '@/lib/journey/flows/InformationPruefen';` — generated from the Schreibliste below. It OWNS the form(s), one record search per picked field (columns and filter from the plan) and the submit plan with every fixed and derived value. You compose: `flow.forms.<entity>` for <Bound>/<Field>, `{...flow.picks.<field>.select} {...flow.pick('<field>')}` (or `flow.pickMany` for a multi pick) for <EntitySelectStep>, `flow.validateStep(n)` in StepNav.onNext, `flow.submit` + `flow.formList` for SummaryStep/SuccessStep, `flow.reset()`; what the hook does not own reads through its door `flow.port` — availability `useOccupancy(flow.port, '<entity>', { resource })`, a count `useRecordCount(flow.port, …)` — never import servicePort next to the hook. Options: `steps` (field → step), `items` (how a hit reads, per pick), `initial`, `messages`. The hook's docblock in .lane-context.md shows the exact call. This flow CHANGES a record of `informationen_und_annahmen`: `{...flow.picks.informationen_und_annahmen.select} {...flow.pick('informationen_und_annahmen')}` picks it, the hook prefills the form with its current values and updates THAT record — never a create step, never a list from useDashboardData. Never import servicePort, useStepForm, useJourneySubmit, useRecordSearch or useDashboardData in this page — check-intents refuses a page that uses the hook and any of them.\n\n## Steps (in this order)\n1. Ungeprüfte Information wählen\n2. Prüfstatus und Vertrauensgrad setzen\n3. Prüfhinweis erfassen\n\n## Schreibliste — the ONLY writes this flow makes (the gate compares your plan steps with this list)\n- updates `informationen_und_annahmen`:\n    - `pruefstatus`: the user enters it (bind it through the layer: form.field/…)\n    - `vertrauensgrad`: the user enters it (bind it through the layer: form.field/…)\n    - `pruefhinweis`: the user enters it (bind it through the layer: form.field/…)\n\n## Reads\n- `informationen_und_annahmen` columns bezeichnung, art, inhalt, vorhaben, gueltig_bis\n\n## Success page\n- shows: `informationen_und_annahmen.pruefstatus`\n- next flows to offer: `ki-interaktion-dokumentieren`\n\n## Never write these — another flow or a tool owns them\n- `vorhaben.titel` (owner: intent `vorhaben-anlegen`)\n- `vorhaben.problem` (owner: intent `vorhaben-anlegen`)\n- `vorhaben.zielbild` (owner: intent `vorhaben-anlegen`)\n- `vorhaben.erfolgskriterien` (owner: intent `vorhaben-anlegen`)\n- `vorhaben.verantwortlich_vorname` (owner: intent `vorhaben-anlegen`)\n- `vorhaben.verantwortlich_nachname` (owner: intent `vorhaben-anlegen`)\n- `vorhaben.bereich` (owner: intent `vorhaben-anlegen`)\n- `vorhaben.startdatum` (owner: intent `vorhaben-anlegen`)\n- `vorhaben.zieldatum` (owner: intent `vorhaben-anlegen`)\n- `vorhaben.status` (owner: intent `vorhaben-anlegen`)\n- `informationen_und_annahmen.vorhaben` (owner: intent `information-erfassen`)\n- `informationen_und_annahmen.bezeichnung` (owner: intent `information-erfassen`)\n- `informationen_und_annahmen.art` (owner: intent `information-erfassen`)\n- `informationen_und_annahmen.inhalt` (owner: intent `information-erfassen`)\n- `informationen_und_annahmen.quelle` (owner: intent `information-erfassen`)\n- `informationen_und_annahmen.zustaendig_vorname` (owner: intent `information-erfassen`)\n- `informationen_und_annahmen.zustaendig_nachname` (owner: intent `information-erfassen`)\n- `informationen_und_annahmen.gueltig_bis` (owner: intent `information-erfassen`)\n- `ki_interaktionen.vorhaben` (owner: intent `ki-interaktion-dokumentieren`)\n- `ki_interaktionen.zeitpunkt` (owner: intent `ki-interaktion-dokumentieren`)\n- `ki_interaktionen.werkzeug` (owner: intent `ki-interaktion-dokumentieren`)\n- `ki_interaktionen.zweck` (owner: intent `ki-interaktion-dokumentieren`)\n- `ki_interaktionen.eingabe` (owner: intent `ki-interaktion-dokumentieren`)\n- `ki_interaktionen.informationen` (owner: intent `ki-interaktion-dokumentieren`)\n- `ki_interaktionen.ki_ergebnis` (owner: intent `ki-interaktion-dokumentieren`)\n- `ki_interaktionen.bewertung` (owner: intent `ki-interaktion-dokumentieren`)\n- `ki_interaktionen.korrekturen` (owner: intent `ki-interaktion-dokumentieren`)\n- `ki_interaktionen.pruefer_vorname` (owner: intent `ki-interaktion-dokumentieren`)\n- `ki_interaktionen.pruefer_nachname` (owner: intent `ki-interaktion-dokumentieren`)\n- `entscheidungen_und_freigaben.vorhaben` (owner: intent `entscheidung-festhalten`)\n- `entscheidungen_und_freigaben.ki_interaktion` (owner: intent `entscheidung-festhalten`)\n- `entscheidungen_und_freigaben.entscheidung` (owner: intent `entscheidung-festhalten`)\n- `entscheidungen_und_freigaben.entscheidungsart` (owner: intent `entscheidung-festhalten`)\n- `entscheidungen_und_freigaben.begruendung` (owner: intent `entscheidung-festhalten`)\n- `entscheidungen_und_freigaben.alternativen` (owner: intent `entscheidung-festhalten`)\n- `entscheidungen_und_freigaben.verantwortlich_vorname` (owner: intent `entscheidung-festhalten`)\n- `entscheidungen_und_freigaben.verantwortlich_nachname` (owner: intent `entscheidung-festhalten`)\n- `entscheidungen_und_freigaben.datum` (owner: intent `entscheidung-festhalten`)\n- `entscheidungen_und_freigaben.freigabestatus` (owner: intent `entscheidung-festhalten`)\n- `ergebnisse_und_nutzen.vorhaben` (owner: intent `ergebnis-nachweisen`)\n- `ergebnisse_und_nutzen.entscheidung` (owner: intent `ergebnis-nachweisen`)\n- `ergebnisse_und_nutzen.ergebnisbeschreibung` (owner: intent `ergebnis-nachweisen`)\n- `ergebnisse_und_nutzen.datum` (owner: intent `ergebnis-nachweisen`)\n- `ergebnisse_und_nutzen.qualitaet` (owner: intent `ergebnis-nachweisen`)\n- `ergebnisse_und_nutzen.anzahl_fehler` (owner: intent `ergebnis-nachweisen`)\n- `ergebnisse_und_nutzen.nacharbeit_stunden` (owner: intent `ergebnis-nachweisen`)\n- `ergebnisse_und_nutzen.bearbeitungszeit_stunden` (owner: intent `ergebnis-nachweisen`)\n- `ergebnisse_und_nutzen.nutzen` (owner: intent `ergebnis-nachweisen`)\n- `ergebnisse_und_nutzen.nachweis` (owner: intent `ergebnis-nachweisen`)\n- `erkenntnisse.qualitaetsstatus` (owner: tool `erkenntnis-zurueckziehen`)\n- `erkenntnisse.pruefdatum` (owner: tool `pruefdatum-setzen`)\n"
+    },
+    {
+      "slug": "ki-interaktion-dokumentieren",
+      "label": {
+        "de": "KI-Interaktion dokumentieren",
+        "en": "Document AI interaction"
+      },
+      "description": "Eine KI-Nutzung mit genutzten Informationen, Ergebnis und menschlicher Bewertung festhalten.",
+      "priority": "must",
+      "writes": [
+        {
+          "entity": "ki_interaktionen",
+          "op": "create",
+          "when": "always",
+          "fields": {
+            "vorhaben": "picked",
+            "zeitpunkt": "derived:now",
+            "werkzeug": "user",
+            "zweck": "user",
+            "eingabe": "user",
+            "informationen": "picked",
+            "ki_ergebnis": "user",
+            "bewertung": "user",
+            "korrekturen": "user",
+            "pruefer_vorname": "user",
+            "pruefer_nachname": "user"
+          },
+          "needs": {}
+        }
+      ],
+      "required": [],
+      "brief": "# Flow `ki-interaktion-dokumentieren` — KI-Interaktion dokumentieren\nEine KI-Nutzung mit genutzten Informationen, Ergebnis und menschlicher Bewertung festhalten.\n\n## Your hook — import it, never rebuild what it owns\n`import { useKiInteraktionDokumentierenFlow } from '@/lib/journey/flows/KiInteraktionDokumentieren';` — generated from the Schreibliste below. It OWNS the form(s), one record search per picked field (columns and filter from the plan) and the submit plan with every fixed and derived value. You compose: `flow.forms.<entity>` for <Bound>/<Field>, `{...flow.picks.<field>.select} {...flow.pick('<field>')}` (or `flow.pickMany` for a multi pick) for <EntitySelectStep>, `flow.validateStep(n)` in StepNav.onNext, `flow.submit` + `flow.formList` for SummaryStep/SuccessStep, `flow.reset()`; what the hook does not own reads through its door `flow.port` — availability `useOccupancy(flow.port, '<entity>', { resource })`, a count `useRecordCount(flow.port, …)` — never import servicePort next to the hook. Options: `steps` (field → step), `items` (how a hit reads, per pick: vorhaben, informationen), `initial`, `messages`. The hook's docblock in .lane-context.md shows the exact call. Never import servicePort, useStepForm, useJourneySubmit, useRecordSearch or useDashboardData in this page — check-intents refuses a page that uses the hook and any of them.\n\n## Steps (in this order)\n1. Vorhaben wählen\n2. Werkzeug, Zweck und Eingabe erfassen\n3. Genutzte Informationen auswählen\n4. KI-Ergebnis und Bewertung mit Korrekturen und Prüfer erfassen\n\n## Schreibliste — the ONLY writes this flow makes (the gate compares your plan steps with this list)\n- creates `ki_interaktionen`:\n    - `vorhaben`: from the record the user picks in this flow\n    - `zeitpunkt`: derived: now() — set it in the plan step, never ask\n    - `werkzeug`: the user enters it (bind it through the layer: form.field/…)\n    - `zweck`: the user enters it (bind it through the layer: form.field/…)\n    - `eingabe`: the user enters it (bind it through the layer: form.field/…)\n    - `informationen`: from the record the user picks in this flow\n    - `ki_ergebnis`: the user enters it (bind it through the layer: form.field/…)\n    - `bewertung`: the user enters it (bind it through the layer: form.field/…)\n    - `korrekturen`: the user enters it (bind it through the layer: form.field/…)\n    - `pruefer_vorname`: the user enters it (bind it through the layer: form.field/…)\n    - `pruefer_nachname`: the user enters it (bind it through the layer: form.field/…)\n\n## Reads\n- `vorhaben` columns titel, status\n- `informationen_und_annahmen` columns bezeichnung, art, pruefstatus, gueltig_bis\n\n## Success page\n- shows: `ki_interaktionen.zweck`, `ki_interaktionen.bewertung`\n- next flows to offer: `entscheidung-festhalten`\n\n## Never write these — another flow or a tool owns them\n- `vorhaben.titel` (owner: intent `vorhaben-anlegen`)\n- `vorhaben.problem` (owner: intent `vorhaben-anlegen`)\n- `vorhaben.zielbild` (owner: intent `vorhaben-anlegen`)\n- `vorhaben.erfolgskriterien` (owner: intent `vorhaben-anlegen`)\n- `vorhaben.verantwortlich_vorname` (owner: intent `vorhaben-anlegen`)\n- `vorhaben.verantwortlich_nachname` (owner: intent `vorhaben-anlegen`)\n- `vorhaben.bereich` (owner: intent `vorhaben-anlegen`)\n- `vorhaben.startdatum` (owner: intent `vorhaben-anlegen`)\n- `vorhaben.zieldatum` (owner: intent `vorhaben-anlegen`)\n- `vorhaben.status` (owner: intent `vorhaben-anlegen`)\n- `informationen_und_annahmen.vorhaben` (owner: intent `information-erfassen`)\n- `informationen_und_annahmen.bezeichnung` (owner: intent `information-erfassen`)\n- `informationen_und_annahmen.art` (owner: intent `information-erfassen`)\n- `informationen_und_annahmen.inhalt` (owner: intent `information-erfassen`)\n- `informationen_und_annahmen.quelle` (owner: intent `information-erfassen`)\n- `informationen_und_annahmen.zustaendig_vorname` (owner: intent `information-erfassen`)\n- `informationen_und_annahmen.zustaendig_nachname` (owner: intent `information-erfassen`)\n- `informationen_und_annahmen.gueltig_bis` (owner: intent `information-erfassen`)\n- `informationen_und_annahmen.vertrauensgrad` (owner: intent `information-erfassen`)\n- `informationen_und_annahmen.pruefstatus` (owner: intent `information-erfassen`)\n- `informationen_und_annahmen.pruefhinweis` (owner: intent `information-pruefen`)\n- `entscheidungen_und_freigaben.vorhaben` (owner: intent `entscheidung-festhalten`)\n- `entscheidungen_und_freigaben.ki_interaktion` (owner: intent `entscheidung-festhalten`)\n- `entscheidungen_und_freigaben.entscheidung` (owner: intent `entscheidung-festhalten`)\n- `entscheidungen_und_freigaben.entscheidungsart` (owner: intent `entscheidung-festhalten`)\n- `entscheidungen_und_freigaben.begruendung` (owner: intent `entscheidung-festhalten`)\n- `entscheidungen_und_freigaben.alternativen` (owner: intent `entscheidung-festhalten`)\n- `entscheidungen_und_freigaben.verantwortlich_vorname` (owner: intent `entscheidung-festhalten`)\n- `entscheidungen_und_freigaben.verantwortlich_nachname` (owner: intent `entscheidung-festhalten`)\n- `entscheidungen_und_freigaben.datum` (owner: intent `entscheidung-festhalten`)\n- `entscheidungen_und_freigaben.freigabestatus` (owner: intent `entscheidung-festhalten`)\n- `ergebnisse_und_nutzen.vorhaben` (owner: intent `ergebnis-nachweisen`)\n- `ergebnisse_und_nutzen.entscheidung` (owner: intent `ergebnis-nachweisen`)\n- `ergebnisse_und_nutzen.ergebnisbeschreibung` (owner: intent `ergebnis-nachweisen`)\n- `ergebnisse_und_nutzen.datum` (owner: intent `ergebnis-nachweisen`)\n- `ergebnisse_und_nutzen.qualitaet` (owner: intent `ergebnis-nachweisen`)\n- `ergebnisse_und_nutzen.anzahl_fehler` (owner: intent `ergebnis-nachweisen`)\n- `ergebnisse_und_nutzen.nacharbeit_stunden` (owner: intent `ergebnis-nachweisen`)\n- `ergebnisse_und_nutzen.bearbeitungszeit_stunden` (owner: intent `ergebnis-nachweisen`)\n- `ergebnisse_und_nutzen.nutzen` (owner: intent `ergebnis-nachweisen`)\n- `ergebnisse_und_nutzen.nachweis` (owner: intent `ergebnis-nachweisen`)\n- `erkenntnisse.qualitaetsstatus` (owner: tool `erkenntnis-zurueckziehen`)\n- `erkenntnisse.pruefdatum` (owner: tool `pruefdatum-setzen`)\n"
+    },
+    {
+      "slug": "entscheidung-festhalten",
+      "label": {
+        "de": "Entscheidung oder Freigabe festhalten",
+        "en": "Record decision or approval"
+      },
+      "description": "Eine Entscheidung, Handlung oder Freigabe mit Begründung, Verantwortlichem und ggf. zugrunde liegender KI-Interaktion dokumentieren.",
+      "priority": "must",
+      "writes": [
+        {
+          "entity": "entscheidungen_und_freigaben",
+          "op": "create",
+          "when": "always",
+          "fields": {
+            "vorhaben": "picked",
+            "ki_interaktion": "picked",
+            "entscheidung": "user",
+            "entscheidungsart": "user",
+            "begruendung": "user",
+            "alternativen": "user",
+            "verantwortlich_vorname": "user",
+            "verantwortlich_nachname": "user",
+            "datum": "derived:today",
+            "freigabestatus": "user"
+          },
+          "needs": {}
+        }
+      ],
+      "required": [],
+      "brief": "# Flow `entscheidung-festhalten` — Entscheidung oder Freigabe festhalten\nEine Entscheidung, Handlung oder Freigabe mit Begründung, Verantwortlichem und ggf. zugrunde liegender KI-Interaktion dokumentieren.\n\n## Your hook — import it, never rebuild what it owns\n`import { useEntscheidungFesthaltenFlow } from '@/lib/journey/flows/EntscheidungFesthalten';` — generated from the Schreibliste below. It OWNS the form(s), one record search per picked field (columns and filter from the plan) and the submit plan with every fixed and derived value. You compose: `flow.forms.<entity>` for <Bound>/<Field>, `{...flow.picks.<field>.select} {...flow.pick('<field>')}` (or `flow.pickMany` for a multi pick) for <EntitySelectStep>, `flow.validateStep(n)` in StepNav.onNext, `flow.submit` + `flow.formList` for SummaryStep/SuccessStep, `flow.reset()`; what the hook does not own reads through its door `flow.port` — availability `useOccupancy(flow.port, '<entity>', { resource })`, a count `useRecordCount(flow.port, …)` — never import servicePort next to the hook. Options: `steps` (field → step), `items` (how a hit reads, per pick: vorhaben, ki_interaktion), `initial`, `messages`. The hook's docblock in .lane-context.md shows the exact call. Never import servicePort, useStepForm, useJourneySubmit, useRecordSearch or useDashboardData in this page — check-intents refuses a page that uses the hook and any of them.\n\n## Steps (in this order)\n1. Vorhaben wählen\n2. Optional KI-Interaktion auswählen\n3. Entscheidung, Art, Begründung und Alternativen erfassen\n4. Verantwortliche Person und Freigabestatus angeben\n\n## Schreibliste — the ONLY writes this flow makes (the gate compares your plan steps with this list)\n- creates `entscheidungen_und_freigaben`:\n    - `vorhaben`: from the record the user picks in this flow\n    - `ki_interaktion`: from the record the user picks in this flow\n    - `entscheidung`: the user enters it (bind it through the layer: form.field/…)\n    - `entscheidungsart`: the user enters it (bind it through the layer: form.field/…)\n    - `begruendung`: the user enters it (bind it through the layer: form.field/…)\n    - `alternativen`: the user enters it (bind it through the layer: form.field/…)\n    - `verantwortlich_vorname`: the user enters it (bind it through the layer: form.field/…)\n    - `verantwortlich_nachname`: the user enters it (bind it through the layer: form.field/…)\n    - `datum`: derived: today() — set it in the plan step, never ask\n    - `freigabestatus`: the user enters it (bind it through the layer: form.field/…)\n\n## Reads\n- `ki_interaktionen` columns zweck, zeitpunkt, bewertung, vorhaben\n\n## Success page\n- shows: `entscheidungen_und_freigaben.entscheidung`, `entscheidungen_und_freigaben.freigabestatus`\n- next flows to offer: `ergebnis-nachweisen`\n\n## Never write these — another flow or a tool owns them\n- `vorhaben.titel` (owner: intent `vorhaben-anlegen`)\n- `vorhaben.problem` (owner: intent `vorhaben-anlegen`)\n- `vorhaben.zielbild` (owner: intent `vorhaben-anlegen`)\n- `vorhaben.erfolgskriterien` (owner: intent `vorhaben-anlegen`)\n- `vorhaben.verantwortlich_vorname` (owner: intent `vorhaben-anlegen`)\n- `vorhaben.verantwortlich_nachname` (owner: intent `vorhaben-anlegen`)\n- `vorhaben.bereich` (owner: intent `vorhaben-anlegen`)\n- `vorhaben.startdatum` (owner: intent `vorhaben-anlegen`)\n- `vorhaben.zieldatum` (owner: intent `vorhaben-anlegen`)\n- `vorhaben.status` (owner: intent `vorhaben-anlegen`)\n- `informationen_und_annahmen.vorhaben` (owner: intent `information-erfassen`)\n- `informationen_und_annahmen.bezeichnung` (owner: intent `information-erfassen`)\n- `informationen_und_annahmen.art` (owner: intent `information-erfassen`)\n- `informationen_und_annahmen.inhalt` (owner: intent `information-erfassen`)\n- `informationen_und_annahmen.quelle` (owner: intent `information-erfassen`)\n- `informationen_und_annahmen.zustaendig_vorname` (owner: intent `information-erfassen`)\n- `informationen_und_annahmen.zustaendig_nachname` (owner: intent `information-erfassen`)\n- `informationen_und_annahmen.gueltig_bis` (owner: intent `information-erfassen`)\n- `informationen_und_annahmen.vertrauensgrad` (owner: intent `information-erfassen`)\n- `informationen_und_annahmen.pruefstatus` (owner: intent `information-erfassen`)\n- `informationen_und_annahmen.pruefhinweis` (owner: intent `information-pruefen`)\n- `ki_interaktionen.vorhaben` (owner: intent `ki-interaktion-dokumentieren`)\n- `ki_interaktionen.zeitpunkt` (owner: intent `ki-interaktion-dokumentieren`)\n- `ki_interaktionen.werkzeug` (owner: intent `ki-interaktion-dokumentieren`)\n- `ki_interaktionen.zweck` (owner: intent `ki-interaktion-dokumentieren`)\n- `ki_interaktionen.eingabe` (owner: intent `ki-interaktion-dokumentieren`)\n- `ki_interaktionen.informationen` (owner: intent `ki-interaktion-dokumentieren`)\n- `ki_interaktionen.ki_ergebnis` (owner: intent `ki-interaktion-dokumentieren`)\n- `ki_interaktionen.bewertung` (owner: intent `ki-interaktion-dokumentieren`)\n- `ki_interaktionen.korrekturen` (owner: intent `ki-interaktion-dokumentieren`)\n- `ki_interaktionen.pruefer_vorname` (owner: intent `ki-interaktion-dokumentieren`)\n- `ki_interaktionen.pruefer_nachname` (owner: intent `ki-interaktion-dokumentieren`)\n- `ergebnisse_und_nutzen.vorhaben` (owner: intent `ergebnis-nachweisen`)\n- `ergebnisse_und_nutzen.entscheidung` (owner: intent `ergebnis-nachweisen`)\n- `ergebnisse_und_nutzen.ergebnisbeschreibung` (owner: intent `ergebnis-nachweisen`)\n- `ergebnisse_und_nutzen.datum` (owner: intent `ergebnis-nachweisen`)\n- `ergebnisse_und_nutzen.qualitaet` (owner: intent `ergebnis-nachweisen`)\n- `ergebnisse_und_nutzen.anzahl_fehler` (owner: intent `ergebnis-nachweisen`)\n- `ergebnisse_und_nutzen.nacharbeit_stunden` (owner: intent `ergebnis-nachweisen`)\n- `ergebnisse_und_nutzen.bearbeitungszeit_stunden` (owner: intent `ergebnis-nachweisen`)\n- `ergebnisse_und_nutzen.nutzen` (owner: intent `ergebnis-nachweisen`)\n- `ergebnisse_und_nutzen.nachweis` (owner: intent `ergebnis-nachweisen`)\n- `erkenntnisse.qualitaetsstatus` (owner: tool `erkenntnis-zurueckziehen`)\n- `erkenntnisse.pruefdatum` (owner: tool `pruefdatum-setzen`)\n"
+    },
+    {
+      "slug": "ergebnis-nachweisen",
+      "label": {
+        "de": "Ergebnis und Nutzen nachweisen",
+        "en": "Record result and benefit"
+      },
+      "description": "Ein Ergebnis mit Qualität, Fehlern, Nacharbeit, Bearbeitungszeit und Nutzennachweis erfassen und mit der Entscheidung verknüpfen.",
+      "priority": "must",
+      "writes": [
+        {
+          "entity": "ergebnisse_und_nutzen",
+          "op": "create",
+          "when": "always",
+          "fields": {
+            "vorhaben": "picked",
+            "entscheidung": "picked",
+            "ergebnisbeschreibung": "user",
+            "datum": "derived:today",
+            "qualitaet": "user",
+            "anzahl_fehler": "user",
+            "nacharbeit_stunden": "user",
+            "bearbeitungszeit_stunden": "user",
+            "nutzen": "user",
+            "nachweis": "user"
+          },
+          "needs": {}
+        }
+      ],
+      "required": [],
+      "brief": "# Flow `ergebnis-nachweisen` — Ergebnis und Nutzen nachweisen\nEin Ergebnis mit Qualität, Fehlern, Nacharbeit, Bearbeitungszeit und Nutzennachweis erfassen und mit der Entscheidung verknüpfen.\n\n## Your hook — import it, never rebuild what it owns\n`import { useErgebnisNachweisenFlow } from '@/lib/journey/flows/ErgebnisNachweisen';` — generated from the Schreibliste below. It OWNS the form(s), one record search per picked field (columns and filter from the plan) and the submit plan with every fixed and derived value. You compose: `flow.forms.<entity>` for <Bound>/<Field>, `{...flow.picks.<field>.select} {...flow.pick('<field>')}` (or `flow.pickMany` for a multi pick) for <EntitySelectStep>, `flow.validateStep(n)` in StepNav.onNext, `flow.submit` + `flow.formList` for SummaryStep/SuccessStep, `flow.reset()`; what the hook does not own reads through its door `flow.port` — availability `useOccupancy(flow.port, '<entity>', { resource })`, a count `useRecordCount(flow.port, …)` — never import servicePort next to the hook. Options: `steps` (field → step), `items` (how a hit reads, per pick: vorhaben, entscheidung), `initial`, `messages`. The hook's docblock in .lane-context.md shows the exact call. Never import servicePort, useStepForm, useJourneySubmit, useRecordSearch or useDashboardData in this page — check-intents refuses a page that uses the hook and any of them.\n\n## Steps (in this order)\n1. Vorhaben wählen\n2. Zugehörige Entscheidung wählen\n3. Ergebnis und Qualität beschreiben\n4. Fehler, Nacharbeit und Bearbeitungszeit eintragen\n5. Nutzen und Nachweis der Wirkung festhalten\n\n## Schreibliste — the ONLY writes this flow makes (the gate compares your plan steps with this list)\n- creates `ergebnisse_und_nutzen`:\n    - `vorhaben`: from the record the user picks in this flow\n    - `entscheidung`: from the record the user picks in this flow\n    - `ergebnisbeschreibung`: the user enters it (bind it through the layer: form.field/…)\n    - `datum`: derived: today() — set it in the plan step, never ask\n    - `qualitaet`: the user enters it (bind it through the layer: form.field/…)\n    - `anzahl_fehler`: the user enters it (bind it through the layer: form.field/…)\n    - `nacharbeit_stunden`: the user enters it (bind it through the layer: form.field/…)\n    - `bearbeitungszeit_stunden`: the user enters it (bind it through the layer: form.field/…)\n    - `nutzen`: the user enters it (bind it through the layer: form.field/…)\n    - `nachweis`: the user enters it (bind it through the layer: form.field/…)\n\n## Reads\n- `entscheidungen_und_freigaben` columns entscheidung, entscheidungsart, freigabestatus, vorhaben\n\n## Success page\n- shows: `ergebnisse_und_nutzen.qualitaet`, `ergebnisse_und_nutzen.anzahl_fehler`\n\n## Never write these — another flow or a tool owns them\n- `vorhaben.titel` (owner: intent `vorhaben-anlegen`)\n- `vorhaben.problem` (owner: intent `vorhaben-anlegen`)\n- `vorhaben.zielbild` (owner: intent `vorhaben-anlegen`)\n- `vorhaben.erfolgskriterien` (owner: intent `vorhaben-anlegen`)\n- `vorhaben.verantwortlich_vorname` (owner: intent `vorhaben-anlegen`)\n- `vorhaben.verantwortlich_nachname` (owner: intent `vorhaben-anlegen`)\n- `vorhaben.bereich` (owner: intent `vorhaben-anlegen`)\n- `vorhaben.startdatum` (owner: intent `vorhaben-anlegen`)\n- `vorhaben.zieldatum` (owner: intent `vorhaben-anlegen`)\n- `vorhaben.status` (owner: intent `vorhaben-anlegen`)\n- `informationen_und_annahmen.vorhaben` (owner: intent `information-erfassen`)\n- `informationen_und_annahmen.bezeichnung` (owner: intent `information-erfassen`)\n- `informationen_und_annahmen.art` (owner: intent `information-erfassen`)\n- `informationen_und_annahmen.inhalt` (owner: intent `information-erfassen`)\n- `informationen_und_annahmen.quelle` (owner: intent `information-erfassen`)\n- `informationen_und_annahmen.zustaendig_vorname` (owner: intent `information-erfassen`)\n- `informationen_und_annahmen.zustaendig_nachname` (owner: intent `information-erfassen`)\n- `informationen_und_annahmen.gueltig_bis` (owner: intent `information-erfassen`)\n- `informationen_und_annahmen.vertrauensgrad` (owner: intent `information-erfassen`)\n- `informationen_und_annahmen.pruefstatus` (owner: intent `information-erfassen`)\n- `informationen_und_annahmen.pruefhinweis` (owner: intent `information-pruefen`)\n- `ki_interaktionen.vorhaben` (owner: intent `ki-interaktion-dokumentieren`)\n- `ki_interaktionen.zeitpunkt` (owner: intent `ki-interaktion-dokumentieren`)\n- `ki_interaktionen.werkzeug` (owner: intent `ki-interaktion-dokumentieren`)\n- `ki_interaktionen.zweck` (owner: intent `ki-interaktion-dokumentieren`)\n- `ki_interaktionen.eingabe` (owner: intent `ki-interaktion-dokumentieren`)\n- `ki_interaktionen.informationen` (owner: intent `ki-interaktion-dokumentieren`)\n- `ki_interaktionen.ki_ergebnis` (owner: intent `ki-interaktion-dokumentieren`)\n- `ki_interaktionen.bewertung` (owner: intent `ki-interaktion-dokumentieren`)\n- `ki_interaktionen.korrekturen` (owner: intent `ki-interaktion-dokumentieren`)\n- `ki_interaktionen.pruefer_vorname` (owner: intent `ki-interaktion-dokumentieren`)\n- `ki_interaktionen.pruefer_nachname` (owner: intent `ki-interaktion-dokumentieren`)\n- `entscheidungen_und_freigaben.vorhaben` (owner: intent `entscheidung-festhalten`)\n- `entscheidungen_und_freigaben.ki_interaktion` (owner: intent `entscheidung-festhalten`)\n- `entscheidungen_und_freigaben.entscheidung` (owner: intent `entscheidung-festhalten`)\n- `entscheidungen_und_freigaben.entscheidungsart` (owner: intent `entscheidung-festhalten`)\n- `entscheidungen_und_freigaben.begruendung` (owner: intent `entscheidung-festhalten`)\n- `entscheidungen_und_freigaben.alternativen` (owner: intent `entscheidung-festhalten`)\n- `entscheidungen_und_freigaben.verantwortlich_vorname` (owner: intent `entscheidung-festhalten`)\n- `entscheidungen_und_freigaben.verantwortlich_nachname` (owner: intent `entscheidung-festhalten`)\n- `entscheidungen_und_freigaben.datum` (owner: intent `entscheidung-festhalten`)\n- `entscheidungen_und_freigaben.freigabestatus` (owner: intent `entscheidung-festhalten`)\n- `erkenntnisse.qualitaetsstatus` (owner: tool `erkenntnis-zurueckziehen`)\n- `erkenntnisse.pruefdatum` (owner: tool `pruefdatum-setzen`)\n"
+    }
+  ],
+  "public_pages": [],
+  "tools": [
+    {
+      "id": "information-veraltet-markieren",
+      "purpose": "Täglich Informationen und Annahmen, deren Gültigkeit abgelaufen ist und die noch nicht widerlegt oder veraltet sind, auf Prüfstatus veraltet setzen."
+    },
+    {
+      "id": "erkenntnis-zurueckziehen",
+      "purpose": "Täglich Erkenntnisse mit abgelaufener Gültigkeit, die noch geprüft oder freigegeben sind, auf Qualitätsstatus zurückgezogen setzen, damit sie nicht ungeprüft wiederverwendet werden."
+    },
+    {
+      "id": "pruefdatum-setzen",
+      "purpose": "Wenn eine Erkenntnis bearbeitet wird und ihr Qualitätsstatus geprüft oder freigegeben ist, aber kein Prüfdatum vorliegt, wird das heutige Datum als Prüfdatum eingetragen. Prüft das Feld Qualitätsstatus im Code."
+    }
+  ],
+  "covered_by_platform": [
+    {
+      "wish": "Nachvollziehbarkeit, wer was wann geändert hat",
+      "feature": "record_history"
+    },
+    {
+      "wish": "Zuständigkeiten und Zugriffe nach Rolle",
+      "feature": "user_roles"
+    },
+    {
+      "wish": "Auswertung der Ergebnisse je Qualität, Vorhaben oder Erkenntnisart",
+      "feature": "distribution_view"
+    },
+    {
+      "wish": "Erkenntnisse und Informationen durchsuchen und filtern",
+      "feature": "search_filter"
+    },
+    {
+      "wish": "Nachweise und Dokumente an Ergebnisse anhängen",
+      "feature": "record_attachments"
+    },
+    {
+      "wish": "Daten als Tabelle exportieren",
+      "feature": "csv_json_export"
+    }
+  ],
+  "ownership": {
+    "vorhaben": {
+      "titel": "intent:vorhaben-anlegen",
+      "problem": "intent:vorhaben-anlegen",
+      "zielbild": "intent:vorhaben-anlegen",
+      "erfolgskriterien": "intent:vorhaben-anlegen",
+      "verantwortlich_vorname": "intent:vorhaben-anlegen",
+      "verantwortlich_nachname": "intent:vorhaben-anlegen",
+      "bereich": "intent:vorhaben-anlegen",
+      "startdatum": "intent:vorhaben-anlegen",
+      "zieldatum": "intent:vorhaben-anlegen",
+      "status": "intent:vorhaben-anlegen"
+    },
+    "informationen_und_annahmen": {
+      "vorhaben": "intent:information-erfassen",
+      "bezeichnung": "intent:information-erfassen",
+      "art": "intent:information-erfassen",
+      "inhalt": "intent:information-erfassen",
+      "quelle": "intent:information-erfassen",
+      "zustaendig_vorname": "intent:information-erfassen",
+      "zustaendig_nachname": "intent:information-erfassen",
+      "gueltig_bis": "intent:information-erfassen",
+      "vertrauensgrad": "intent:information-pruefen",
+      "pruefstatus": "tool:information-veraltet-markieren",
+      "pruefhinweis": "intent:information-pruefen"
+    },
+    "ki_interaktionen": {
+      "vorhaben": "intent:ki-interaktion-dokumentieren",
+      "zeitpunkt": "intent:ki-interaktion-dokumentieren",
+      "werkzeug": "intent:ki-interaktion-dokumentieren",
+      "zweck": "intent:ki-interaktion-dokumentieren",
+      "eingabe": "intent:ki-interaktion-dokumentieren",
+      "informationen": "intent:ki-interaktion-dokumentieren",
+      "ki_ergebnis": "intent:ki-interaktion-dokumentieren",
+      "bewertung": "intent:ki-interaktion-dokumentieren",
+      "korrekturen": "intent:ki-interaktion-dokumentieren",
+      "pruefer_vorname": "intent:ki-interaktion-dokumentieren",
+      "pruefer_nachname": "intent:ki-interaktion-dokumentieren"
+    },
+    "entscheidungen_und_freigaben": {
+      "vorhaben": "intent:entscheidung-festhalten",
+      "ki_interaktion": "intent:entscheidung-festhalten",
+      "entscheidung": "intent:entscheidung-festhalten",
+      "entscheidungsart": "intent:entscheidung-festhalten",
+      "begruendung": "intent:entscheidung-festhalten",
+      "alternativen": "intent:entscheidung-festhalten",
+      "verantwortlich_vorname": "intent:entscheidung-festhalten",
+      "verantwortlich_nachname": "intent:entscheidung-festhalten",
+      "datum": "intent:entscheidung-festhalten",
+      "freigabestatus": "intent:entscheidung-festhalten"
+    },
+    "ergebnisse_und_nutzen": {
+      "vorhaben": "intent:ergebnis-nachweisen",
+      "entscheidung": "intent:ergebnis-nachweisen",
+      "ergebnisbeschreibung": "intent:ergebnis-nachweisen",
+      "datum": "intent:ergebnis-nachweisen",
+      "qualitaet": "intent:ergebnis-nachweisen",
+      "anzahl_fehler": "intent:ergebnis-nachweisen",
+      "nacharbeit_stunden": "intent:ergebnis-nachweisen",
+      "bearbeitungszeit_stunden": "intent:ergebnis-nachweisen",
+      "nutzen": "intent:ergebnis-nachweisen",
+      "nachweis": "intent:ergebnis-nachweisen"
+    },
+    "erkenntnisse": {
+      "qualitaetsstatus": "tool:erkenntnis-zurueckziehen",
+      "pruefdatum": "tool:pruefdatum-setzen"
+    }
+  },
+  "dashboard": {
+    "focus": [
+      "Vorhaben nach Status",
+      "Ungeprüfte oder veraltete Informationen und Annahmen",
+      "Freigaben im Status Beantragt",
+      "Ergebnisse mit Fehlern und Nacharbeit",
+      "Erkenntnisse nach Qualitätsstatus und Gültigkeit"
+    ],
+    "hints": [
+      "Vorhaben ist der zentrale Einstieg; von dort zu Informationen, KI-Interaktionen, Entscheidungen, Ergebnissen und Erkenntnissen",
+      "Nutzen nicht nur an Bearbeitungszeit, sondern an Fehlern, Nacharbeit und Qualität zeigen",
+      "Abgelaufene Gültigkeit bei Informationen und Erkenntnissen deutlich markieren"
+    ],
+    "wishes": []
+  }
+}

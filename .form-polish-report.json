@@ -1,0 +1,57 @@
+{
+  "entities": {
+    "Vorhaben": {
+      "placeholders_set": 9,
+      "defaults_keys": [
+        "status",
+        "startdatum"
+      ],
+      "computed_keys": [
+        "_vorhaben_dauer_tage"
+      ],
+      "reason": "Startdatum und Zieldatum bilden ein Datumspaar, daher wird die Dauer in Tagen als virtueller Wert berechnet; es gibt keine Preisfelder."
+    },
+    "Informationen und Annahmen": {
+      "placeholders_set": 8,
+      "defaults_keys": [
+        "art",
+        "pruefstatus"
+      ],
+      "computed_keys": [],
+      "reason": "Keine Formeln, da es keine numerischen Felder oder Datumspaare gibt und es sich um reine Wissensdaten handelt."
+    },
+    "KI-Interaktionen": {
+      "placeholders_set": 10,
+      "defaults_keys": [
+        "zeitpunkt"
+      ],
+      "computed_keys": [],
+      "reason": "Keine numerischen Felder oder Datumspaare vorhanden, daher keine Formeln."
+    },
+    "Entscheidungen und Freigaben": {
+      "placeholders_set": 8,
+      "defaults_keys": [
+        "datum",
+        "freigabestatus"
+      ],
+      "computed_keys": [],
+      "reason": "Keine Formeln, da das Formular keine numerischen Felder oder Datumspaare enthält."
+    },
+    "Ergebnisse und Nutzen": {
+      "placeholders_set": 9,
+      "defaults_keys": [
+        "datum"
+      ],
+      "computed_keys": [],
+      "reason": "Keine Formel, da keine Preis- oder Datumspaare vorhanden sind und die Stundenwerte unabhängige Messgrößen sind."
+    },
+    "Erkenntnisse": {
+      "placeholders_set": 12,
+      "defaults_keys": [
+        "qualitaetsstatus"
+      ],
+      "computed_keys": [],
+      "reason": "Keine Formeln, da die Erkenntnisse nur Text und Daten enthalten und kein Datumspaar oder Preis berechenbar ist."
+    }
+  }
+}

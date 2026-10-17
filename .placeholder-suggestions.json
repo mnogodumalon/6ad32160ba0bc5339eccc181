@@ -1,0 +1,70 @@
+{
+  "VorhabenDialog.tsx": {
+    "titel": "z. B. KI-Assistent einführen",
+    "problem": "Was ist das Problem?",
+    "zielbild": "Wie sieht der Zielzustand aus?",
+    "erfolgskriterien": "Eine Messgröße pro Zeile",
+    "verantwortlich_vorname": "z. B. Anna",
+    "verantwortlich_nachname": "z. B. Müller",
+    "bereich": "z. B. Vertrieb, HR",
+    "startdatum": "Wann startet das Vorhaben?",
+    "zieldatum": "Bis wann soll es fertig sein?"
+  },
+  "InformationenUndAnnahmenDialog.tsx": {
+    "vorhaben": "Welches Vorhaben?",
+    "bezeichnung": "z. B. Budget für Q3",
+    "inhalt": "Was ist bekannt oder angenommen?",
+    "quelle": "z. B. Kickoff-Protokoll",
+    "zustaendig_vorname": "z. B. Anna",
+    "zustaendig_nachname": "z. B. Müller",
+    "gueltig_bis": "Bis wann gültig?",
+    "pruefhinweis": "Was ist zu prüfen?"
+  },
+  "KiInteraktionenDialog.tsx": {
+    "vorhaben": "Welches Vorhaben?",
+    "zeitpunkt": "Wann fand die Interaktion statt?",
+    "werkzeug": "z. B. ChatGPT, Claude",
+    "zweck": "z. B. Textentwurf erstellen",
+    "eingabe": "Was wurde der KI vorgegeben?",
+    "informationen": "Welche Informationen?",
+    "ki_ergebnis": "Was hat die KI geliefert?",
+    "korrekturen": "Was wurde geändert?",
+    "pruefer_vorname": "z. B. Anna",
+    "pruefer_nachname": "z. B. Müller"
+  },
+  "EntscheidungenUndFreigabenDialog.tsx": {
+    "vorhaben": "Welches Vorhaben?",
+    "ki_interaktion": "Welche KI-Interaktion?",
+    "entscheidung": "z. B. Modell wechseln",
+    "begruendung": "Warum wurde so entschieden?",
+    "alternativen": "Eine Alternative pro Zeile",
+    "verantwortlich_vorname": "z. B. Anna",
+    "verantwortlich_nachname": "z. B. Müller",
+    "datum": "Wann wurde entschieden?"
+  },
+  "ErgebnisseUndNutzenDialog.tsx": {
+    "vorhaben": "Welches Vorhaben?",
+    "entscheidung": "Welche Entscheidung?",
+    "ergebnisbeschreibung": "Was wurde erreicht?",
+    "datum": "Wann wurde es erreicht?",
+    "anzahl_fehler": "z. B. 3",
+    "nacharbeit_stunden": "z. B. 2,5",
+    "bearbeitungszeit_stunden": "z. B. 8",
+    "nutzen": "Welchen Nutzen bringt es?",
+    "nachweis": "Woran zeigt sich die Wirkung?"
+  },
+  "ErkenntnisseDialog.tsx": {
+    "vorhaben": "Welches Vorhaben?",
+    "ergebnis": "Welches Ergebnis?",
+    "titel": "z. B. Klare Prompts sparen Nacharbeit",
+    "beschreibung": "Was wurde erlebt oder gelernt?",
+    "anwendungsbereich": "z. B. Textentwürfe, Recherche",
+    "anwendbarkeit": "Wann gilt die Erkenntnis?",
+    "einschraenkungen": "Wo gilt sie nicht?",
+    "gueltig_bis": "Bis wann gültig?",
+    "pruefer_vorname": "z. B. Anna",
+    "pruefer_nachname": "z. B. Müller",
+    "pruefdatum": "Wann wurde geprüft?",
+    "wiederverwendung": "Wie lässt sie sich wiederverwenden?"
+  }
+}
