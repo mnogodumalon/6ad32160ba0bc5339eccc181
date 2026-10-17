@@ -20,6 +20,7 @@
 import type { ComponentType } from 'react';
 
 // <custom:intent-imports>
+import { IconRocket, IconBulb, IconChecklist, IconRobot, IconGavel, IconChartBar } from '@tabler/icons-react';
 // </custom:intent-imports>
 
 export interface IntentLink {
@@ -42,6 +43,12 @@ export interface IntentLink {
 
 export const INTENTS: IntentLink[] = [
   // <custom:intents>
+  { path: '/intents/vorhaben-anlegen', label: { de: 'Vorhaben anlegen', en: 'Create project' }, icon: IconRocket, description: 'Ein neues Vorhaben mit Problem, Zielbild, Erfolgskriterien und verantwortlicher Person als zentralen Arbeitskontext anlegen.' },
+  { path: '/intents/information-erfassen', label: { de: 'Information oder Annahme erfassen', en: 'Record information or assumption' }, icon: IconBulb, description: 'Eine Information oder Annahme zu einem Vorhaben festhalten, zunächst als ungeprüft.' },
+  { path: '/intents/information-pruefen', label: { de: 'Information prüfen', en: 'Review information' }, icon: IconChecklist, description: 'Ungeprüfte Informationen und Annahmen bestätigen, widerlegen oder als veraltet markieren.' },
+  { path: '/intents/ki-interaktion-dokumentieren', label: { de: 'KI-Interaktion dokumentieren', en: 'Document AI interaction' }, icon: IconRobot, description: 'Eine KI-Nutzung mit genutzten Informationen, Ergebnis und menschlicher Bewertung festhalten.' },
+  { path: '/intents/entscheidung-festhalten', label: { de: 'Entscheidung oder Freigabe festhalten', en: 'Record decision or approval' }, icon: IconGavel, description: 'Eine Entscheidung, Handlung oder Freigabe mit Begründung, Verantwortlichem und ggf. zugrunde liegender KI-Interaktion dokumentieren.' },
+  { path: '/intents/ergebnis-nachweisen', label: { de: 'Ergebnis und Nutzen nachweisen', en: 'Record result and benefit' }, icon: IconChartBar, description: 'Ein Ergebnis mit Qualität, Fehlern, Nacharbeit, Bearbeitungszeit und Nutzennachweis erfassen und mit der Entscheidung verknüpfen.' },
   // </custom:intents>
 ];
 
@@ -52,7 +59,7 @@ export const INTENTS: IntentLink[] = [
  * purpose — a scaffold update resets it to false (self-healing if Phase 2
  * never ran).
  */
-export const INTENTS_PENDING = true;
+export const INTENTS_PENDING = false;
 
 /**
  * When the Phase-1 bundle was deployed (ISO, set by the service together with

@@ -39,6 +39,12 @@ export type MessageFieldKey<E extends EntityKey> = E extends keyof MessageFields
 
 export const REQUIRED_MESSAGES: { [E in EntityKey]?: Partial<Record<MessageFieldKey<E>, string>> } = {
   // <custom:messages>
+  vorhaben: { titel: "Bitte einen Titel eingeben.", problem: "Bitte das Problem beschreiben.", verantwortlich_vorname: "Bitte den Vornamen der verantwortlichen Person eingeben.", verantwortlich_nachname: "Bitte den Nachnamen der verantwortlichen Person eingeben.", status: "Bitte einen Status wählen." },
+  informationen_und_annahmen: { vorhaben: "Bitte ein Vorhaben auswählen.", bezeichnung: "Bitte eine Bezeichnung eingeben.", art: "Bitte Information oder Annahme wählen.", inhalt: "Bitte den Inhalt beschreiben.", pruefstatus: "Bitte einen Prüfstatus wählen." },
+  ki_interaktionen: { vorhaben: "Bitte ein Vorhaben auswählen.", zweck: "Bitte den Zweck der KI-Nutzung eingeben.", bewertung: "Bitte die menschliche Bewertung wählen." },
+  entscheidungen_und_freigaben: { vorhaben: "Bitte ein Vorhaben auswählen.", entscheidung: "Bitte die Entscheidung eingeben.", entscheidungsart: "Bitte die Art wählen.", verantwortlich_vorname: "Bitte den Vornamen der verantwortlichen Person eingeben.", verantwortlich_nachname: "Bitte den Nachnamen der verantwortlichen Person eingeben." },
+  ergebnisse_und_nutzen: { vorhaben: "Bitte ein Vorhaben auswählen.", ergebnisbeschreibung: "Bitte das Ergebnis beschreiben." },
+  erkenntnisse: { vorhaben: "Bitte ein Vorhaben auswählen.", titel: "Bitte einen Titel eingeben.", beschreibung: "Bitte die Erfahrung beschreiben.", qualitaetsstatus: "Bitte einen Qualitätsstatus wählen." },
   // </custom:messages>
 };
 
