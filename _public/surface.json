@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "pages": [
+    {
+      "slug": "vorhaben-einreichen",
+      "component": "VorhabenEinreichen",
+      "title": "Vorhaben einreichen",
+      "endpoints": [
+        {
+          "entity": "vorhaben",
+          "op": "create",
+          "fields": [
+            "titel",
+            "problem",
+            "zielbild",
+            "erfolgskriterien",
+            "verantwortlich_vorname",
+            "verantwortlich_nachname",
+            "bereich",
+            "startdatum",
+            "zieldatum"
+          ]
+        }
+      ]
+    }
+  ]
+}

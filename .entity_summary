@@ -52,17 +52,17 @@ There is NO `@/config/appIds`, no `@/config/lookupOptions` and no
 createRecordUrl from the service. Note the lowercase `l` in the service path.
 
 - Vorhaben (vorhaben): titel!^[string/text] "Titel des Vorhabens", problem!^[string/textarea] "Problembeschreibung", zielbild^[string/textarea], erfolgskriterien^[string/textarea], verantwortlich_vorname!^[string/text] "Verantwortliche Person – Vorname", verantwortlich_nachname![string/text] "Verantwortliche Person – Nachname", bereich[string/text], status![lookup/select: geplant|in_arbeit|abgeschlossen|pausiert|abgebrochen], startdatum[date/date], zieldatum[date/date]
-  ≡ 3 records at build time
+  ≡ 8 records at build time
   ◈ status → choice (5 options, ChoiceGroup)
   ⚙ getVorhaben() · getVorhabenEntry(id) · createVorhabenEntry(fields) · updateVorhabenEntry(id, fields) · deleteVorhabenEntry(id) · queryVorhaben({ filter, orderby, limit, offset, fields }) · countVorhaben(filter?)
 - Informationen und Annahmen (informationen_und_annahmen): vorhaben!^[applookup/select], bezeichnung!^[string/text], art!^[lookup/radio: information|annahme], inhalt!^[string/textarea], quelle^[string/text], zustaendig_vorname[string/text] "Zuständige Person – Vorname", zustaendig_nachname[string/text] "Zuständige Person – Nachname", gueltig_bis[date/date], pruefstatus![lookup/select: ungeprueft|bestaetigt|widerlegt|veraltet], vertrauensgrad[lookup/select: niedrig|mittel|hoch], pruefhinweis[string/textarea]
-  ≡ 3 records at build time
+  ≡ 8 records at build time
   ◈ art → choice (2 options, ChoiceGroup) · pruefstatus → choice (4 options, ChoiceGroup) · vertrauensgrad → choice (3 options, ChoiceGroup) · vorhaben → record (vorhaben, EntitySelectStep)
   ⚙ getInformationenUndAnnahmen() · getInformationenUndAnnahmenEntry(id) · createInformationenUndAnnahmenEntry(fields) · updateInformationenUndAnnahmenEntry(id, fields) · deleteInformationenUndAnnahmenEntry(id) · queryInformationenUndAnnahmen({ filter, orderby, limit, offset, fields }) · countInformationenUndAnnahmen(filter?)
   ✚ EnrichedInformationenUndAnnahmen adds ONLY vorhabenName — via enrichInformationenUndAnnahmen(informationenUndAnnahmen, { vorhabenMap }), all maps required
   → vorhaben links to app_id 6ad3213fa3643e45557898e1
 - KI-Interaktionen (ki_interaktionen): vorhaben!^[applookup/select], zeitpunkt^[date/datetimeminute], werkzeug^[string/text] "Eingesetztes KI-Werkzeug", zweck!^[string/text], eingabe^[string/textarea], informationen[multipleapplookup/select] "Genutzte Informationen", ki_ergebnis[string/textarea], bewertung![lookup/radio: uebernommen|angepasst|verworfen] "Menschliche Bewertung", korrekturen[string/textarea], pruefer_vorname[string/text], pruefer_nachname[string/text]
-  ≡ 3 records at build time
+  ≡ 8 records at build time
   · zeitpunkt: A specific moment in time consisting of year, month, day, hour and minute (or `null`/`None`) The field value will be a string in the format `<YYYY>-<MM>-<DD>T<HH>:<MM>` (or `null`/`None`). For example: `2000-02-29T11:30`. For `POST`/`PUT`/`PATCH` requests the REST API uses a liberal parsing approach so that strings like `2026`, `February 29, 2000 12:34 MEST`, `letztes Jahr` etc. will be accepted as value datetime values. However this runs the risk of parsing ambiguous values incorrectly. To ensure reliable parsing it is best to use the canonical format specified above.
   ◈ bewertung → choice (3 options, ChoiceGroup) · vorhaben → record (vorhaben, EntitySelectStep) · informationen → record (informationen_und_annahmen, EntitySelectStep)
   ⚙ getKiInteraktionen() · getKiInteraktionenEntry(id) · createKiInteraktionenEntry(fields) · updateKiInteraktionenEntry(id, fields) · deleteKiInteraktionenEntry(id) · queryKiInteraktionen({ filter, orderby, limit, offset, fields }) · countKiInteraktionen(filter?)
@@ -70,21 +70,21 @@ createRecordUrl from the service. Note the lowercase `l` in the service path.
   → vorhaben links to app_id 6ad3213fa3643e45557898e1
   → informationen links to app_id 6ad32143edcd8e44d455c655
 - Entscheidungen und Freigaben (entscheidungen_und_freigaben): vorhaben!^[applookup/select], ki_interaktion^[applookup/select] "Zugrunde liegende KI-Interaktion", entscheidung!^[string/text], entscheidungsart!^[lookup/radio: entscheidung|handlung|freigabe] "Art", begruendung^[string/textarea], alternativen[string/textarea] "Betrachtete Alternativen", verantwortlich_vorname![string/text] "Verantwortliche Person – Vorname", verantwortlich_nachname![string/text] "Verantwortliche Person – Nachname", datum[date/date], freigabestatus[lookup/select: beantragt|freigegeben|abgelehnt] "Status der Freigabe"
-  ≡ 3 records at build time
+  ≡ 8 records at build time
   ◈ entscheidungsart → choice (3 options, ChoiceGroup) · freigabestatus → choice (3 options, ChoiceGroup) · vorhaben → record (vorhaben, EntitySelectStep) · ki_interaktion → record (ki_interaktionen, EntitySelectStep)
   ⚙ getEntscheidungenUndFreigaben() · getEntscheidungenUndFreigabenEntry(id) · createEntscheidungenUndFreigabenEntry(fields) · updateEntscheidungenUndFreigabenEntry(id, fields) · deleteEntscheidungenUndFreigabenEntry(id) · queryEntscheidungenUndFreigaben({ filter, orderby, limit, offset, fields }) · countEntscheidungenUndFreigaben(filter?)
   ✚ EnrichedEntscheidungenUndFreigaben adds ONLY vorhabenName, ki_interaktionName — via enrichEntscheidungenUndFreigaben(entscheidungenUndFreigaben, { vorhabenMap, kiInteraktionenMap }), all maps required
   → vorhaben links to app_id 6ad3213fa3643e45557898e1
   → ki_interaktion links to app_id 6ad321445f74705ef853a84c
 - Ergebnisse und Nutzen (ergebnisse_und_nutzen): vorhaben!^[applookup/select], entscheidung^[applookup/select] "Zugehörige Entscheidung", ergebnisbeschreibung!^[string/textarea], datum^[date/date], qualitaet^[lookup/select: sehr_gut|gut|ausreichend|mangelhaft] "Qualitätsbewertung", anzahl_fehler[number], nacharbeit_stunden[number] "Nacharbeit in Stunden", bearbeitungszeit_stunden[number] "Bearbeitungszeit in Stunden", nutzen[string/textarea] "Nutzenbeschreibung", nachweis[string/textarea] "Nachweis der Wirkung"
-  ≡ 3 records at build time
+  ≡ 8 records at build time
   ◈ qualitaet → choice (4 options, ChoiceGroup) · vorhaben → record (vorhaben, EntitySelectStep) · entscheidung → record (entscheidungen_und_freigaben, EntitySelectStep)
   ⚙ getErgebnisseUndNutzen() · getErgebnisseUndNutzenEntry(id) · createErgebnisseUndNutzenEntry(fields) · updateErgebnisseUndNutzenEntry(id, fields) · deleteErgebnisseUndNutzenEntry(id) · queryErgebnisseUndNutzen({ filter, orderby, limit, offset, fields }) · countErgebnisseUndNutzen(filter?)
   ✚ EnrichedErgebnisseUndNutzen adds ONLY vorhabenName, entscheidungName — via enrichErgebnisseUndNutzen(ergebnisseUndNutzen, { vorhabenMap, entscheidungenUndFreigabenMap }), all maps required
   → vorhaben links to app_id 6ad3213fa3643e45557898e1
   → entscheidung links to app_id 6ad321459223d37ca90058bc
 - Erkenntnisse (erkenntnisse): vorhaben!^[applookup/select], ergebnis^[applookup/select] "Zugehöriges Ergebnis", titel!^[string/text] "Titel der Erkenntnis", beschreibung!^[string/textarea] "Beschreibung der Erfahrung", erkenntnisart^[lookup/select: vorgehensweise|fehlerquelle|gute_praxis|warnhinweis] "Art", anwendungsbereich[string/text], anwendbarkeit[string/textarea] "Bedingungen der Anwendbarkeit", einschraenkungen[string/textarea], qualitaetsstatus![lookup/select: entwurf|geprueft|freigegeben|zurueckgezogen], gueltig_bis[date/date], pruefer_vorname[string/text], pruefer_nachname[string/text], pruefdatum[date/date], wiederverwendung[string/textarea] "Hinweis zur Wiederverwendung"
-  ≡ 3 records at build time
+  ≡ 8 records at build time
   ◈ erkenntnisart → choice (4 options, ChoiceGroup) · qualitaetsstatus → choice (4 options, ChoiceGroup) · vorhaben → record (vorhaben, EntitySelectStep) · ergebnis → record (ergebnisse_und_nutzen, EntitySelectStep)
   ⚙ getErkenntnisse() · getErkenntnisseEntry(id) · createErkenntnisseEntry(fields) · updateErkenntnisseEntry(id, fields) · deleteErkenntnisseEntry(id) · queryErkenntnisse({ filter, orderby, limit, offset, fields }) · countErkenntnisse(filter?)
   ✚ EnrichedErkenntnisse adds ONLY vorhabenName, ergebnisName — via enrichErkenntnisse(erkenntnisse, { vorhabenMap, ergebnisseUndNutzenMap }), all maps required

@@ -1,0 +1,108 @@
+{
+  "version": 1,
+  "flows": [
+    {
+      "path": "/intents/vorhaben-anlegen",
+      "label": "Vorhaben anlegen",
+      "description": "Ein neues Vorhaben mit Problem, Zielbild, Erfolgskriterien und verantwortlicher Person als zentralen Arbeitskontext anlegen.",
+      "file": "src/pages/intents/VorhabenAnlegenPage.tsx",
+      "summary": "/**\n * Vorhaben anlegen — 3-Schritt-Wizard plus Prüfen.\n * Steps: 1) Titel und Problem → 2) Zielbild und Erfolgskriterien → 3) Verantwortliche Person und Zeitraum → 4) Prüfen & anlegen.\n * Reads: nichts. Writes: vorhaben (Status fix „geplant“, vom Hook gesetzt).\n * Composes: IntentWizardShell, Bound, StepNav, SummaryStep, SuccessStep.\n */",
+      "components": [
+        "Bound",
+        "IntentWizardShell",
+        "StepNav",
+        "SuccessStep",
+        "SummaryStep",
+        "WizardStep"
+      ],
+      "writes": []
+    },
+    {
+      "path": "/intents/information-erfassen",
+      "label": "Information oder Annahme erfassen",
+      "description": "Eine Information oder Annahme zu einem Vorhaben festhalten, zunächst als ungeprüft.",
+      "file": "src/pages/intents/InformationErfassenPage.tsx",
+      "summary": "/**\n * Information erfassen — Wizard für eine Information oder Annahme zu einem Vorhaben.\n * Steps: 1) Vorhaben wählen → 2) Bezeichnung, Art und Inhalt erfassen → 3) Quelle, Zuständige und Gültigkeit → 4) Prüfen & anlegen.\n * Reads: vorhaben. Writes: informationen_und_annahmen (Prüfstatus fix „ungeprüft“).\n * Composes: IntentWizardShell, EntitySelectStep, Bound, StepNav, SummaryStep, SuccessStep.\n */",
+      "components": [
+        "Bound",
+        "EntitySelectStep",
+        "IntentWizardShell",
+        "StepNav",
+        "SuccessStep",
+        "SummaryStep",
+        "WizardStep"
+      ],
+      "writes": []
+    },
+    {
+      "path": "/intents/information-pruefen",
+      "label": "Information prüfen",
+      "description": "Ungeprüfte Informationen und Annahmen bestätigen, widerlegen oder als veraltet markieren.",
+      "file": "src/pages/intents/InformationPruefenPage.tsx",
+      "summary": "/**\n * Information prüfen — 3-Schritt-Wizard plus Prüfen.\n * Steps: 1) Ungeprüfte Information wählen → 2) Prüfstatus und Vertrauensgrad setzen → 3) Prüfhinweis erfassen → 4) Prüfen & speichern.\n * Reads: informationen_und_annahmen. Writes: informationen_und_annahmen (update: pruefstatus, vertrauensgrad, pruefhinweis).\n * Composes: IntentWizardShell, EntitySelectStep, Bound, StepNav, SummaryStep, SuccessStep.\n */",
+      "components": [
+        "Bound",
+        "EntitySelectStep",
+        "IntentWizardShell",
+        "StepNav",
+        "SuccessStep",
+        "SummaryStep",
+        "WizardStep"
+      ],
+      "writes": []
+    },
+    {
+      "path": "/intents/ki-interaktion-dokumentieren",
+      "label": "KI-Interaktion dokumentieren",
+      "description": "Eine KI-Nutzung mit genutzten Informationen, Ergebnis und menschlicher Bewertung festhalten.",
+      "file": "src/pages/intents/KiInteraktionDokumentierenPage.tsx",
+      "summary": "/**\n * KI-Interaktion dokumentieren — 4-Schritt-Wizard.\n * Steps: 1) Vorhaben wählen → 2) Werkzeug, Zweck und Eingabe erfassen → 3) Genutzte Informationen auswählen\n *        → 4) KI-Ergebnis und Bewertung mit Korrekturen und Prüfer erfassen → Prüfen & anlegen.\n * Reads: vorhaben, informationen_und_annahmen. Writes: ki_interaktionen (Zeitpunkt setzt der Flow selbst).\n * Composes: IntentWizardShell, EntitySelectStep, Field, Bound, StepNav, SummaryStep, SuccessStep.\n */",
+      "components": [
+        "Bound",
+        "EntitySelectStep",
+        "Field",
+        "IntentWizardShell",
+        "StepNav",
+        "SuccessStep",
+        "SummaryStep",
+        "WizardStep"
+      ],
+      "writes": []
+    },
+    {
+      "path": "/intents/entscheidung-festhalten",
+      "label": "Entscheidung oder Freigabe festhalten",
+      "description": "Eine Entscheidung, Handlung oder Freigabe mit Begründung, Verantwortlichem und ggf. zugrunde liegender KI-Interaktion dokumentieren.",
+      "file": "src/pages/intents/EntscheidungFesthaltenPage.tsx",
+      "summary": "/**\n * Entscheidung festhalten — 4-Schritt-Wizard.\n * Steps: 1) Vorhaben wählen → 2) Optional KI-Interaktion auswählen → 3) Entscheidung, Art, Begründung, Alternativen\n *        → 4) Verantwortliche Person und Freigabestatus → Prüfen & anlegen.\n * Reads: vorhaben, ki_interaktionen. Writes: entscheidungen_und_freigaben (datum = heute, vom Plan gesetzt).\n * Composes: IntentWizardShell, EntitySelectStep, Bound, StepNav, SummaryStep, SuccessStep.\n */",
+      "components": [
+        "Bound",
+        "EntitySelectStep",
+        "IntentWizardShell",
+        "StepNav",
+        "SuccessStep",
+        "SummaryStep",
+        "WizardStep"
+      ],
+      "writes": []
+    },
+    {
+      "path": "/intents/ergebnis-nachweisen",
+      "label": "Ergebnis und Nutzen nachweisen",
+      "description": "Ein Ergebnis mit Qualität, Fehlern, Nacharbeit, Bearbeitungszeit und Nutzennachweis erfassen und mit der Entscheidung verknüpfen.",
+      "file": "src/pages/intents/ErgebnisNachweisenPage.tsx",
+      "summary": "/**\n * Ergebnis und Nutzen nachweisen — 5-Schritt-Wizard.\n * Steps: 1) Vorhaben wählen → 2) Zugehörige Entscheidung wählen → 3) Ergebnis und Qualität beschreiben\n *        → 4) Fehler, Nacharbeit und Bearbeitungszeit eintragen → 5) Nutzen und Nachweis festhalten → Prüfen & anlegen.\n * Reads: vorhaben, entscheidungen_und_freigaben. Writes: ergebnisse_und_nutzen (via useErgebnisNachweisenFlow).\n * Composes: IntentWizardShell, EntitySelectStep, Bound, StepNav, SummaryStep, SuccessStep.\n */",
+      "components": [
+        "Bound",
+        "EntitySelectStep",
+        "IntentWizardShell",
+        "StepNav",
+        "SuccessStep",
+        "SummaryStep",
+        "WizardStep"
+      ],
+      "writes": []
+    }
+  ],
+  "unregistered_pages": []
+}
